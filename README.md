@@ -1,3 +1,3 @@
-# Computational-Statistics-Project (MVA 2024-2025) : Variational Inference via Wasserstein Gradient Flows
+# Computational-Statistics-Project (MVA 2024-2025) : On the properties of variational approximations of Gibbs posteriors
 
-This repository implements computational techniques related to the article [**Variational Inference via Wasserstein Gradient Flows**](https://arxiv.org/pdf/2205.15902)(). This project explores Wasserstein gradient flows as a way to optimize variational inference methods, providing a novel approach to approximate complex posterior distributions in Bayesian inference.
+This repository implements computational techniques related to the article [**On the properties of variational approximations of Gibbs posteriors**](https://arxiv.org/pdf/1506.04091). 

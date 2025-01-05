@@ -1,6 +1,7 @@
 """ Sequential Monte Carlo (SMC) algorithm for Bayesian inference. """
 
 import numpy as np
+from scipy.optimize import bisect
 
 ### First we implement systematic resampling as defined in algorithm 2 of the paper. ###
 def systematic_resampling(W):
@@ -30,7 +31,9 @@ def systematic_resampling(W):
         s += 1 
     return np.array(A)
 
-def Tempering_SMC(N, tau, rw):
+
+### Next we implement the SMC algorithm as defined in algorithm 1 of the paper. ###
+def Tempering_SMC(N, tau, kappa, target_distribution, initial_distribution, likelihood_ratio):
     """ 
     Perform the Tempering Sequential Monte Carlo (SMC) algorithm for Bayesian inference.
 
@@ -48,16 +51,34 @@ def Tempering_SMC(N, tau, rw):
          ESS threshold for resampling.
 
     rw : positive
-        random walk tuning parameter.
+         random walk tuning parameter.
 
-    Returns
-    -------
-    array-like, shape (N,)
-        Array of samples from the target distribution.
+    kappa : float
+         Random walk tuning parameter.
+
+    target_distribution : callable
+         Target distribution function \( \pi \).
+
+    initial_distribution : callable
+         Initial distribution function \( \pi_\xi \).
+
+    likelihood_ratio : callable
+         Function computing \( r_n(\theta) \).
+
+    Returns:
+    ----------
+        list: List of particle states at each iteration.
     """
-    
+    theta_0 = [initial_distribution() for _ in range(N)]
     t = 1
     lambda_0 = 0
     Z_0 = 1
-    theta_0 = []
+    
+    # Loop a 
+
+    # Loop b
+
+    # Loop c
+
+    # Loop d
     

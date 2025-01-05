@@ -1,5 +1,34 @@
 """ Sequential Monte Carlo (SMC) algorithm for Bayesian inference. """
+
 import numpy as np
+
+### First we implement systematic resampling as defined in algorithm 2 of the paper. ###
+def systematic_resampling(W):
+    """
+    Perform systematic resampling given a set of normalized weights.
+
+    Args:
+        W (numpy.ndarray): Array of normalized weights.
+        W_t (float): Normalized weights of the current time step, size N.
+
+    Returns:
+       A (numpy.ndarray) : Indices of resampled particles.
+    """
+    N = len(W)
+    U = np.random.uniform(0, 1)  # Step a: Sample U ~ U([0, 1])
+    cumulative_weights = N * np.cumsum(W)  # Step b: Compute cumulative weights
+
+    # Step c: Initialize variables
+    s = U
+    m = 1
+    A = []
+    # Step d: Resample
+    for n in range(1, N + 1):
+        while s > cumulative_weights[m]:
+            m += 1
+        A.append(m)
+        s += 1 
+    return np.array(A)
 
 def Tempering_SMC(N, tau, rw):
     """ 

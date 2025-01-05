@@ -1,7 +1,8 @@
-""" Sequential Monte Carlo (SMC) algorithm for Bayesian inference. """
+#Sequential Monte Carlo (SMC) algorithm for Bayesian inference.
 
 import numpy as np
 from scipy.optimize import bisect
+
 
 ### First we implement systematic resampling as defined in algorithm 2 of the paper. ###
 def systematic_resampling(W):
@@ -34,51 +35,71 @@ def systematic_resampling(W):
 
 ### Next we implement the SMC algorithm as defined in algorithm 1 of the paper. ###
 def Tempering_SMC(N, tau, kappa, target_distribution, initial_distribution, likelihood_ratio):
-    """ 
-    Perform the Tempering Sequential Monte Carlo (SMC) algorithm for Bayesian inference.
-
-    The Tempering SMC algorithm is a variant of the SMC algorithm that uses a sequence of
-    intermediate distributions to sample from the target distribution. This sequence of
-    intermediate distributions is defined by a sequence of temperatures, which are used to
-    interpolate between the prior distribution and the target distribution.
+    """ Perform the Tempering Sequential Monte Carlo (SMC) algorithm for Bayesian inference.
 
     Parameters
     ----------
     N : int
-        Number of particles to use in the SMC algorithm.
+    Number of particles to use in the SMC algorithm.
 
     tau : float
-         ESS threshold for resampling.
+        ESS threshold for resampling.
 
     rw : positive
-         random walk tuning parameter.
+        random walk tuning parameter.
 
     kappa : float
-         Random walk tuning parameter.
+        Random walk tuning parameter.
 
     target_distribution : callable
-         Target distribution function \( \pi \).
+        Target distribution function  pi
 
     initial_distribution : callable
-         Initial distribution function \( \pi_\xi \).
+        Initial distribution function pi_xi
 
     likelihood_ratio : callable
-         Function computing \( r_n(\theta) \).
+        Function computing r_n(theta)
 
     Returns:
     ----------
-        list: List of particle states at each iteration.
-    """
-    theta_0 = [initial_distribution() for _ in range(N)]
-    t = 1
-    lambda_0 = 0
-    Z_0 = 1
+    list: List of particle states at each iteration. 
+    """ 
     
-    # Loop a 
+    theta = [initial_distribution() for _ in range(N)]
+    t = 1
+    lambda_t = 0
+    Z = 1
+    results = []
 
-    # Loop b
+    def program_bisec(lambd):
+        w = np.exp(- (lambd - lambda_t) * np.array([likelihood_ratio(p) for p in theta]))
+        ratio = (np.sum(w) ** 2) / np.sum(w ** 2)
+        return ratio - N * tau
+    
+    while True:
+        # Step a: Solve for new lambda_t using bisection 
+        lambda_new = bisect(program_bisec, lambda_t, 1)
+        w = np.exp(- (lambda_new - lambda_t) * np.array([likelihood_ratio(p) for p in theta]))
+        if lambda_new <= lambda_t:
+            break 
 
-    # Loop c
+        # Step b: Resample
+        normalized_weights = w / np.sum(w)  
+        A = systematic_resampling(normalized_weights)
+        theta = [theta[a] for a in A]
 
-    # Loop d
+        # Step c: MCMC step (Gaussian random-walk Metropolis kernel)
+        cov = kappa * np.cov(np.array(theta).T)
+        for i in range(N):
+            proposal = theta[i] + np.random.multivariate_normal(np.zeros(len(theta[0])), cov)
+            accept_ratio = min(1, target_distribution(proposal) / target_distribution(theta[i]))
+            if np.random.uniform() < accept_ratio:
+                theta[i] = proposal
+
+    
+        # Step d: Update normalizing constant Z
+        Z *= np.mean(w)
+        results.append((theta.copy(), Z))
+ 
+    return results
     

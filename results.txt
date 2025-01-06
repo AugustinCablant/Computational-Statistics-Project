@@ -1,0 +1,27 @@
+====================================================================================================
+Pima-Indians-Diabetes, 8 variables, 768 observations
+====================================================================================================
+misclassification rate, Mean Field (F2): 0.295 
+misclassification rate, Full cov. (F3): 0.29 
+misclassification rate, SVM: 0.232
+
+
+
+====================================================================================================
+credit-g, 20 variables, 1000 observations
+====================================================================================================
+misclassification rate, Mean Field (F2): 0.395 
+misclassification rate, Full cov. (F3): 0.39 
+misclassification rate, SVM: 0.261
+
+
+
+====================================================================================================
+breast-cancer, 9 variables, 286 observations
+====================================================================================================
+misclassification rate, Mean Field (F2): 0.302 
+misclassification rate, Full cov. (F3): 0.294 
+misclassification rate, SVM: 0.241
+
+
+

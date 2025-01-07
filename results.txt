@@ -1,0 +1,10 @@
+====================================================================================================
+Pima-Indians-Diabetes, 8 variables, 768 observations
+====================================================================================================
+misclassification rate, Mean Field (F2): 0.297 
+misclassification rate, Full cov. (F3): 0.293 
+misclassification rate, Hinge loss: 0.265 
+misclassification rate, SVM: 0.232
+
+
+
